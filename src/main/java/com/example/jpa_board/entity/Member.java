@@ -1,8 +1,12 @@
 package com.example.jpa_board.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 @Table(name = "member")
 public class Member extends BaseEntity {
     @Id
@@ -17,4 +21,12 @@ public class Member extends BaseEntity {
 
     @Column(nullable = false)
     private String email;
+
+    public Member(String username, String password, String email) {
+        super();
+    }
+
+    public String updateEmail(String email) {
+        return this.email = email;
+    }
 }
