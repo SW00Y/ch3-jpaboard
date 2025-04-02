@@ -20,6 +20,12 @@ public class MemberService {
         return new MemberResponseDto(member);
     }
 
+    public Member getMember(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+        return member;
+    }
+
     @Transactional
     public MemberResponseDto saveMember(MemberRequestDto memberRequestDto) {
         Member member = new Member(memberRequestDto.getUsername(), memberRequestDto.getPassword(), memberRequestDto.getEmail());

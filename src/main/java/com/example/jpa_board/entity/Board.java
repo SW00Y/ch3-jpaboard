@@ -27,10 +27,6 @@ public class Board extends BaseEntity {
     @Column(columnDefinition = "longtext")
     private String contents;
 
-    @Column(nullable = false)
-    private String password;
-
-
     public void update(BoardRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
@@ -40,7 +36,6 @@ public class Board extends BaseEntity {
         this.member = member;
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
-        this.password = requestDto.getPassword();
     }
 
 }

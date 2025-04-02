@@ -18,6 +18,8 @@ import java.util.stream.Collectors;
 public class BoardService {
     private final BoardRepository boardRepository;
 
+    //로그인을 한 상태에서 쿠키에 있는 memberId 와 Board의 memberId가 같을 경우 upp, del 가능하게 처리
+
     public List<BoardResponseDto> getAllBoard() {
         List<Board> result = boardRepository.findAll();
 
@@ -35,7 +37,7 @@ public class BoardService {
 
     @Transactional
     public BoardResponseDto createBoard(BoardRequestDto boardRequestDto, Member member) {
-        Board board = new Board(boardRequestDto, member);
+        Board board = new Board(boardRequestDto,member);
         boardRepository.save(board);
         return new BoardResponseDto(board);
     }

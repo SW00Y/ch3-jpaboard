@@ -14,7 +14,7 @@ public class MemberController {
 
     private final MemberService memberService;
 
-        @GetMapping("/{memberId}")
+    @GetMapping("/{memberId}")
     public ResponseEntity<MemberResponseDto> getMemberById(@PathVariable Long memberId) {
         MemberResponseDto member = memberService.getMemberById(memberId);
         return ResponseEntity.ok(member);

@@ -9,5 +9,4 @@ public class BoardRequestDto {
     long memberId;
     String title;
     String contents;
-    String password;
 }
