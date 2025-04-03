@@ -29,15 +29,17 @@ public class MemberController {
 
     // 이메일 업데이트
     @PutMapping("/{memberId}")
-    public ResponseEntity<MemberResponseDto> updateMember(@PathVariable Long memberId, @RequestBody String email) {
-        MemberResponseDto updatedMember = memberService.updateMember(memberId, email);
+    public ResponseEntity<MemberResponseDto> updateMember(@PathVariable Long memberId,
+                                                          MemberRequestDto memberRequestDto,
+                                                          @CookieValue("memberId") long cookieMemberId) {
+        MemberResponseDto updatedMember = memberService.updateMember(memberId, memberRequestDto, cookieMemberId);
         return ResponseEntity.ok(updatedMember);
     }
 
     // 사용자 삭제
     @DeleteMapping("/{memberId}")
-    public ResponseEntity<Void> deleteMember(@PathVariable Long memberId) {
-        memberService.deleteMember(memberId);
+    public ResponseEntity<Void> deleteMember(@PathVariable Long memberId, @CookieValue("memberId") long cookieMemberId) {
+        memberService.deleteMember(memberId, cookieMemberId);
         return ResponseEntity.noContent().build();
     }
 }

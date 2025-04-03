@@ -8,9 +8,11 @@ import com.example.jpa_board.service.member.MemberService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.http.client.HttpClientProperties;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -20,6 +22,7 @@ public class BoardController {
 
     private final BoardService boardService;
     private final MemberService memberService;
+    private final HttpClientProperties httpClientProperties;
 
 
     @GetMapping
@@ -33,35 +36,21 @@ public class BoardController {
     }
 
     @PostMapping
-    public ResponseEntity<BoardResponseDto> createBoard(@RequestBody BoardRequestDto boardRequestDto
-    , HttpServletRequest httpServletRequest) {
-
-        Long memberId = getMemberIdFromCookie(httpServletRequest);
-        Member member = memberService.getMember(memberId);
-
-        return ResponseEntity.ok(boardService.createBoard(boardRequestDto, member));
+    public ResponseEntity<BoardResponseDto> createBoard(@RequestBody BoardRequestDto boardRequestDto, @CookieValue("memberId") long memberId) {
+        return ResponseEntity.ok(boardService.createBoard(boardRequestDto, memberId));
     }
 
     @PutMapping("/{boardId}")
     public ResponseEntity<BoardResponseDto> updateBoard(
-            @PathVariable long boardId, @RequestBody BoardRequestDto boardRequestDto) {
-        return ResponseEntity.ok(boardService.updateBoard(boardId, boardRequestDto));
+            @PathVariable long boardId, @RequestBody BoardRequestDto boardRequestDto, @CookieValue("memberId") long memberId) {
+        return ResponseEntity.ok(boardService.updateBoard(boardId, boardRequestDto, memberId));
     }
 
     @DeleteMapping("/{boardId}")
-    public ResponseEntity<Void> deleteBoard(@PathVariable long boardId) {
-        boardService.deleteBoard(boardId);
+    public ResponseEntity<Void> deleteBoard(@PathVariable long boardId, @CookieValue("memberId") long memberId) {
+        boardService.deleteBoard(boardId, memberId);
         return ResponseEntity.noContent().build();
     }
 
-    private Long getMemberIdFromCookie(HttpServletRequest request) {
-        if (request.getCookies() != null) {
-            for (Cookie cookie : request.getCookies()) {
-                if (cookie.getName().equals("memberId")) {
-                    return Long.parseLong(cookie.getValue());
-                }
-            }
-        }
-        return null;
-    }
+
 }

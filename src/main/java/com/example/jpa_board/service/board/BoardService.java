@@ -1,11 +1,14 @@
 package com.example.jpa_board.service.board;
 
 
+import com.example.jpa_board.config.exception.CustomException;
+import com.example.jpa_board.config.exception.ExceptionErrorCode;
 import com.example.jpa_board.dto.board.BoardRequestDto;
 import com.example.jpa_board.dto.board.BoardResponseDto;
 import com.example.jpa_board.entity.Board;
 import com.example.jpa_board.entity.Member;
 import com.example.jpa_board.repository.board.BoardRepository;
+import com.example.jpa_board.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,8 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BoardService {
     private final BoardRepository boardRepository;
-
-    //로그인을 한 상태에서 쿠키에 있는 memberId 와 Board의 memberId가 같을 경우 upp, del 가능하게 처리
+    private final MemberService memberService;
 
     public List<BoardResponseDto> getAllBoard() {
         List<Board> result = boardRepository.findAll();
@@ -36,26 +38,48 @@ public class BoardService {
     }
 
     @Transactional
-    public BoardResponseDto createBoard(BoardRequestDto boardRequestDto, Member member) {
+    public BoardResponseDto createBoard(BoardRequestDto boardRequestDto, Long memberId) {
+        Member member = memberService.getMember(memberId);
         Board board = new Board(boardRequestDto,member);
         boardRepository.save(board);
         return new BoardResponseDto(board);
     }
 
     @Transactional
-    public BoardResponseDto updateBoard(long boardId, BoardRequestDto boardRequestDto) {
-        Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new RuntimeException("update에러"));
+    public BoardResponseDto updateBoard(long boardId, BoardRequestDto boardRequestDto, Long memberId) {
+        Board board = checkBoardOwner(boardId, memberId);
         board.update(boardRequestDto);
         return new BoardResponseDto(board);
     }
 
     @Transactional
-    public void deleteBoard(long boardId) {
-        Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new RuntimeException("delete에러"));
+    public void deleteBoard(long boardId, Long memberId) {
+        Board board = checkBoardOwner(boardId, memberId);
         boardRepository.delete(board);
     }
 
+
+    /**************
+     * 예외처리부분
+     * @param boardId
+     * @param memberId
+     * @return
+     */
+    public Board checkBoardOwner(long boardId, long memberId) {
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new CustomException(ExceptionErrorCode.BOARD_NOT_FOUND));
+
+        if (!board.getMember().getId().equals(memberId)) {
+            throw new CustomException(ExceptionErrorCode.UNAUTHORIZED_ACCESS);
+        }
+
+        return board;
+    }
+
+    public void checkBoardContent(BoardRequestDto boardRequestDto) {
+        if(boardRequestDto.getTitle().length() > 30){
+            throw new CustomException(ExceptionErrorCode.USER_NOT_FOUND);
+        }
+    }
 
 }
