@@ -44,7 +44,7 @@ public class AuthFilter extends GenericFilterBean {
         if (memberId.isEmpty()) {
             //로그인 안 되어 있으먼 401
             res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            res.getWriter().write("login필요오류");
+            res.getWriter().write("login이 필요합니다.");
             return;
         }
 
@@ -52,7 +52,7 @@ public class AuthFilter extends GenericFilterBean {
         chain.doFilter(request, response);
     }
 
-    // 🔹 쿠키에서 특정 값 가져오는 메서드
+    // 쿠키 값 가져옴
     private Optional<String> getCookieValue(HttpServletRequest req, String name) {
         if (req.getCookies() == null) {
             return Optional.empty();

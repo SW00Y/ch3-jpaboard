@@ -1,5 +1,6 @@
 package com.example.jpa_board.controller.login;
 
+import com.example.jpa_board.config.security.PasswordEncoder;
 import com.example.jpa_board.dto.member.LoginRequestDto;
 import com.example.jpa_board.dto.member.MemberResponseDto;
 import com.example.jpa_board.entity.Member;
@@ -17,6 +18,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class LoginController {
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto requestDto, HttpServletResponse response) {
@@ -24,7 +26,7 @@ public class LoginController {
 
         if (optionalMember.isPresent()) {
             Member member = optionalMember.get();
-            if (member.getPassword().equals(requestDto.getPassword())) { 
+            if(passwordEncoder.matches(requestDto.getPassword(), member.getPassword())) {
                 Cookie idCookie = new Cookie("memberId", String.valueOf(member.getId()));
                 Cookie usernameCookie = new Cookie("username", member.getUsername());
                 Cookie emailCookie = new Cookie("email", member.getEmail());

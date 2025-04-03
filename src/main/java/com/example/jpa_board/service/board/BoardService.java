@@ -32,13 +32,13 @@ public class BoardService {
     }
 
     public BoardResponseDto getBoardById(long boardId) {
-        Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new RuntimeException("ById에러"));
+        Board board = checkBoardId(boardId);
         return new BoardResponseDto(board);
     }
 
     @Transactional
     public BoardResponseDto createBoard(BoardRequestDto boardRequestDto, Long memberId) {
+        checkBoardContent(boardRequestDto);
         Member member = memberService.getMember(memberId);
         Board board = new Board(boardRequestDto,member);
         boardRepository.save(board);
@@ -47,6 +47,7 @@ public class BoardService {
 
     @Transactional
     public BoardResponseDto updateBoard(long boardId, BoardRequestDto boardRequestDto, Long memberId) {
+        checkBoardContent(boardRequestDto);
         Board board = checkBoardOwner(boardId, memberId);
         board.update(boardRequestDto);
         return new BoardResponseDto(board);
@@ -76,9 +77,20 @@ public class BoardService {
         return board;
     }
 
+    public Board checkBoardId(long boardId) {
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new CustomException(ExceptionErrorCode.BOARD_NOT_FOUND));
+
+        return board;
+    }
+
     public void checkBoardContent(BoardRequestDto boardRequestDto) {
         if(boardRequestDto.getTitle().length() > 30){
-            throw new CustomException(ExceptionErrorCode.USER_NOT_FOUND);
+            throw new CustomException(ExceptionErrorCode.TITLE_LENGTH_SHORT);
+        }
+
+        if(boardRequestDto.getContents() == null){
+            throw new CustomException(ExceptionErrorCode.CONTENT_IS_NULL);
         }
     }
 

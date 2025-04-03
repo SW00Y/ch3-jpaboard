@@ -23,14 +23,15 @@ public class MemberController {
     // 사용자 저장
     @PostMapping
     public ResponseEntity<MemberResponseDto> saveMember(@RequestBody MemberRequestDto memberRequestDto) {
+
         MemberResponseDto savedMember = memberService.saveMember(memberRequestDto);
         return ResponseEntity.ok(savedMember);
     }
 
-    // 이메일 업데이트
+    // 이름 업데이트
     @PutMapping("/{memberId}")
     public ResponseEntity<MemberResponseDto> updateMember(@PathVariable Long memberId,
-                                                          MemberRequestDto memberRequestDto,
+                                                          @RequestBody MemberRequestDto memberRequestDto,
                                                           @CookieValue("memberId") long cookieMemberId) {
         MemberResponseDto updatedMember = memberService.updateMember(memberId, memberRequestDto, cookieMemberId);
         return ResponseEntity.ok(updatedMember);

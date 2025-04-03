@@ -23,7 +23,9 @@ public class Member extends BaseEntity {
     private String email;
 
     public Member(String username, String password, String email) {
-        super();
+        this.username = username;
+        this.password = password;
+        this.email = email;
     }
 
     public String updateUsername(String username) {
