@@ -32,24 +32,27 @@ public class BoardController {
 
     @GetMapping("/{boardId}")
     public ResponseEntity<BoardResponseDto> getBoardById(@PathVariable long boardId) {
-        return ResponseEntity.ok(boardService.getBoardById(boardId));
+            BoardResponseDto dto = boardService.getBoardById(boardId);
+        return ResponseEntity.ok(dto);
     }
 
     @PostMapping
     public ResponseEntity<BoardResponseDto> createBoard(@RequestBody BoardRequestDto boardRequestDto, @CookieValue("memberId") long memberId) {
-        return ResponseEntity.ok(boardService.createBoard(boardRequestDto, memberId));
+        BoardResponseDto dto = boardService.createBoard(boardRequestDto, memberId);
+        return ResponseEntity.ok(dto);
     }
 
     @PutMapping("/{boardId}")
     public ResponseEntity<BoardResponseDto> updateBoard(
             @PathVariable long boardId, @RequestBody BoardRequestDto boardRequestDto, @CookieValue("memberId") long memberId) {
-        return ResponseEntity.ok(boardService.updateBoard(boardId, boardRequestDto, memberId));
+        BoardResponseDto dto = boardService.updateBoard(boardId, boardRequestDto, memberId);
+        return ResponseEntity.ok(dto);
     }
 
     @DeleteMapping("/{boardId}")
-    public ResponseEntity<Void> deleteBoard(@PathVariable long boardId, @CookieValue("memberId") long memberId) {
+    public ResponseEntity<String> deleteBoard(@PathVariable long boardId, @CookieValue("memberId") long memberId) {
         boardService.deleteBoard(boardId, memberId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("게시글이 삭제되었습니다.");
     }
 
 

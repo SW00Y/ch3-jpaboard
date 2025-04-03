@@ -16,16 +16,16 @@ public class MemberController {
 
     @GetMapping("/{memberId}")
     public ResponseEntity<MemberResponseDto> getMemberById(@PathVariable Long memberId) {
-        MemberResponseDto member = memberService.getMemberById(memberId);
-        return ResponseEntity.ok(member);
+        MemberResponseDto dto = memberService.getMemberById(memberId);
+        return ResponseEntity.ok(dto);
     }
 
     // 사용자 저장
     @PostMapping
     public ResponseEntity<MemberResponseDto> saveMember(@RequestBody MemberRequestDto memberRequestDto) {
 
-        MemberResponseDto savedMember = memberService.saveMember(memberRequestDto);
-        return ResponseEntity.ok(savedMember);
+        MemberResponseDto dto = memberService.saveMember(memberRequestDto);
+        return ResponseEntity.ok(dto);
     }
 
     // 이름 업데이트
@@ -33,14 +33,14 @@ public class MemberController {
     public ResponseEntity<MemberResponseDto> updateMember(@PathVariable Long memberId,
                                                           @RequestBody MemberRequestDto memberRequestDto,
                                                           @CookieValue("memberId") long cookieMemberId) {
-        MemberResponseDto updatedMember = memberService.updateMember(memberId, memberRequestDto, cookieMemberId);
-        return ResponseEntity.ok(updatedMember);
+        MemberResponseDto dto = memberService.updateMember(memberId, memberRequestDto, cookieMemberId);
+        return ResponseEntity.ok(dto);
     }
 
     // 사용자 삭제
     @DeleteMapping("/{memberId}")
-    public ResponseEntity<Void> deleteMember(@PathVariable Long memberId, @CookieValue("memberId") long cookieMemberId) {
+    public ResponseEntity<String> deleteMember(@PathVariable Long memberId, @CookieValue("memberId") long cookieMemberId) {
         memberService.deleteMember(memberId, cookieMemberId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("삭제되었습니다.");
     }
 }

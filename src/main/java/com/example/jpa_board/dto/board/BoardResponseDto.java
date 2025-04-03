@@ -8,10 +8,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BoardResponseDto {
-    long boardId;
-    String username;
-    String title;
-    String contents;
+    private long boardId;
+    private String username;
+    private String title;
+    private String contents;
 
     public BoardResponseDto(Board board) {
         this.boardId = board.getId();

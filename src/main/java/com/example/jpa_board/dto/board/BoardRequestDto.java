@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class BoardRequestDto {
-    long memberId;
-    String title;
-    String contents;
+    private long memberId;
+    private String title;
+    private String contents;
 }

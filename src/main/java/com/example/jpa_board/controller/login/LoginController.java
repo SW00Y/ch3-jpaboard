@@ -44,4 +44,26 @@ public class LoginController {
         }
         return ResponseEntity.status(401).body("아이디나 비밀번호 잘못됨");
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletResponse response) {
+        Cookie idCookie = new Cookie("memberId", null);
+        Cookie usernameCookie = new Cookie("username", null);
+        Cookie emailCookie = new Cookie("email", null);
+
+        idCookie.setMaxAge(0);
+        usernameCookie.setMaxAge(0);
+        emailCookie.setMaxAge(0);
+
+        idCookie.setPath("/");
+        usernameCookie.setPath("/");
+        emailCookie.setPath("/");
+
+        response.addCookie(idCookie);
+        response.addCookie(usernameCookie);
+        response.addCookie(emailCookie);
+
+        return ResponseEntity.ok("로그아웃 되었습니다.");
+    }
+
 }

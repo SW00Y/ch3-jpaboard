@@ -87,8 +87,6 @@ public class MemberService {
             throw new CustomException(ExceptionErrorCode.USER_NOT_FOUND);
         };
 
-
-
         return member;
     }
 
