@@ -3,6 +3,7 @@ package com.example.jpa_board.service.board;
 
 import com.example.jpa_board.config.exception.CustomException;
 import com.example.jpa_board.config.exception.ExceptionErrorCode;
+import com.example.jpa_board.dto.board.BoardListResponseDto;
 import com.example.jpa_board.dto.board.BoardRequestDto;
 import com.example.jpa_board.dto.board.BoardResponseDto;
 import com.example.jpa_board.entity.Board;
@@ -10,6 +11,10 @@ import com.example.jpa_board.entity.Member;
 import com.example.jpa_board.repository.board.BoardRepository;
 import com.example.jpa_board.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +39,15 @@ public class BoardService {
     public BoardResponseDto getBoardById(long boardId) {
         Board board = checkBoardId(boardId);
         return new BoardResponseDto(board);
+    }
+
+    public List<BoardListResponseDto> getBoards(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Object[]> boardPage = boardRepository.findAllWithCommentCount(pageable);
+
+        return boardPage.stream()
+                .map(row -> new BoardListResponseDto((Board) row[0], ((Number) row[1]).intValue()))
+                .toList();
     }
 
     @Transactional

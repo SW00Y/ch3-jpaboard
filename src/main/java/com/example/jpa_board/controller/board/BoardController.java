@@ -1,5 +1,6 @@
 package com.example.jpa_board.controller.board;
 
+import com.example.jpa_board.dto.board.BoardListResponseDto;
 import com.example.jpa_board.dto.board.BoardRequestDto;
 import com.example.jpa_board.dto.board.BoardResponseDto;
 import com.example.jpa_board.entity.Member;
@@ -9,6 +10,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.http.client.HttpClientProperties;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +36,13 @@ public class BoardController {
     public ResponseEntity<BoardResponseDto> getBoardById(@PathVariable long boardId) {
             BoardResponseDto dto = boardService.getBoardById(boardId);
         return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping("/page/{pageNumber}")
+    public List<BoardListResponseDto> getBoards(
+            @PathVariable int pageNumber,
+            @RequestParam(defaultValue = "10") int size) {
+        return boardService.getBoards(pageNumber, size);
     }
 
     @PostMapping
