@@ -29,10 +29,11 @@ public class AuthFilter extends GenericFilterBean {
         String requestURI = req.getRequestURI();
 
         List<String> WHITE_LIST = Arrays.asList(
-                "/auth/login",  //로그인
-                "/api/members/signup"   //회원가입
+                "/auth/login"  //로그인
+                , "/api/members/signup"   //회원가입
         );
 
+        // WHITE_LIST에 포함된 주소인지 검사( 와일드카드 사용 필요시 startswith사용)
         if (WHITE_LIST.contains(requestURI)) {
             chain.doFilter(request, response);
             return;
