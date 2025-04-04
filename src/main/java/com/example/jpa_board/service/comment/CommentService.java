@@ -13,6 +13,7 @@ import com.example.jpa_board.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +34,7 @@ public class CommentService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ExceptionErrorCode.USER_NOT_FOUND));
 
-        Comment comment = new Comment(board, member ,requestDto);
+        Comment comment = new Comment(board, member, requestDto);
 
         commentRepository.save(comment);
 
@@ -58,7 +59,7 @@ public class CommentService {
             throw new CustomException(ExceptionErrorCode.UNAUTHORIZED_ACCESS);
         }
 
-        comment.setContent(requestDto.getContent());
+        comment.update(requestDto);
         return new CommentResponseDto(comment);
     }
 

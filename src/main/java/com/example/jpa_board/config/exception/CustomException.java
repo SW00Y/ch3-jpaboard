@@ -2,6 +2,9 @@ package com.example.jpa_board.config.exception;
 
 import org.springframework.http.HttpStatus;
 
+/**
+ * 커스텀 예외처리
+ */
 public class CustomException extends RuntimeException {
 
     private final HttpStatus status;

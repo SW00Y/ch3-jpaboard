@@ -45,6 +45,8 @@ public class BoardService {
         Pageable pageable = PageRequest.of(page, size);
         Page<Object[]> boardPage = boardRepository.findAllWithCommentCount(pageable);
 
+        //row[0] = board(a)
+        //row[1] = count(b) = comment
         return boardPage.stream()
                 .map(row -> new BoardListResponseDto((Board) row[0], ((Number) row[1]).intValue()))
                 .toList();
@@ -54,7 +56,7 @@ public class BoardService {
     public BoardResponseDto createBoard(BoardRequestDto boardRequestDto, Long memberId) {
         checkBoardContent(boardRequestDto);
         Member member = memberService.getMember(memberId);
-        Board board = new Board(boardRequestDto,member);
+        Board board = new Board(boardRequestDto, member);
         boardRepository.save(board);
         return new BoardResponseDto(board);
     }
@@ -99,11 +101,11 @@ public class BoardService {
     }
 
     public void checkBoardContent(BoardRequestDto boardRequestDto) {
-        if(boardRequestDto.getTitle().length() > 30){
+        if (boardRequestDto.getTitle().length() > 30) {
             throw new CustomException(ExceptionErrorCode.TITLE_LENGTH_SHORT);
         }
 
-        if(boardRequestDto.getContents() == null){
+        if (boardRequestDto.getContents() == null) {
             throw new CustomException(ExceptionErrorCode.CONTENT_IS_NULL);
         }
     }

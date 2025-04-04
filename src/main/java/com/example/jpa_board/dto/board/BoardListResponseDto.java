@@ -5,6 +5,9 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 
+/***
+ * 페이지로 출력 Board
+ */
 @Getter
 public class BoardListResponseDto {
     private final Long id;

@@ -6,12 +6,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
-@Setter
+//@Setter
 public class BoardResponseDto {
-    private long boardId;
-    private String username;
-    private String title;
-    private String contents;
+    private final long boardId;
+    private final String username;
+    private final String title;
+    private final String contents;
 
     public BoardResponseDto(Board board) {
         this.boardId = board.getId();

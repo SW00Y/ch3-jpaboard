@@ -29,8 +29,8 @@ public class AuthFilter extends GenericFilterBean {
         String requestURI = req.getRequestURI();
 
         List<String> WHITE_LIST = Arrays.asList(
-                "/auth/login",
-                "/api/members/signup"
+                "/auth/login",  //로그인
+                "/api/members/signup"   //회원가입
         );
 
         if (WHITE_LIST.contains(requestURI)) {
@@ -42,9 +42,9 @@ public class AuthFilter extends GenericFilterBean {
         Optional<String> memberId = getCookieValue(req, "memberId");
 
         if (memberId.isEmpty()) {
-            //로그인 안 되어 있으먼 401
+            //로그인 안 되어 있으먼 401 오류처리(Enum 보다 필터가 빠르기 때문에 Enum처리 X)
             res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            res.getWriter().write("login이 필요합니다.");
+            res.getWriter().write("Need Login"); //결과가 한글은 깨짐..
             return;
         }
 

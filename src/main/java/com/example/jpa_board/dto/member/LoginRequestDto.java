@@ -4,8 +4,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+//@NoArgsConstructor
 public class LoginRequestDto {
-    private String email;
-    private String password;
+    private final String email;
+    private final String password;
+
+    LoginRequestDto(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
 }
