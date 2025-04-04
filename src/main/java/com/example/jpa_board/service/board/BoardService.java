@@ -27,6 +27,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final MemberService memberService;
 
+    //Board 전체 출력
     public List<BoardResponseDto> getAllBoard() {
         List<Board> result = boardRepository.findAll();
 
@@ -36,22 +37,24 @@ public class BoardService {
         return dto;
     }
 
+    //Board Id로 조회
     public BoardResponseDto getBoardById(long boardId) {
         Board board = checkBoardId(boardId);
         return new BoardResponseDto(board);
     }
 
+    //Board Page
     public List<BoardListResponseDto> getBoards(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Object[]> boardPage = boardRepository.findAllWithCommentCount(pageable);
 
-        //row[0] = board(a)
-        //row[1] = count(b) = comment
+        //row[0] = board(a), row[1] = count(b) = comment
         return boardPage.stream()
                 .map(row -> new BoardListResponseDto((Board) row[0], ((Number) row[1]).intValue()))
                 .toList();
     }
 
+    //Board 생성, 현재 로그인한(쿠키) memberId 사용
     @Transactional
     public BoardResponseDto createBoard(BoardRequestDto boardRequestDto, Long memberId) {
         checkBoardContent(boardRequestDto);
@@ -61,6 +64,7 @@ public class BoardService {
         return new BoardResponseDto(board);
     }
 
+    //Board 업데이트, 현재 로그인한(쿠키) memberId 사용
     @Transactional
     public BoardResponseDto updateBoard(long boardId, BoardRequestDto boardRequestDto, Long memberId) {
         checkBoardContent(boardRequestDto);
@@ -69,6 +73,7 @@ public class BoardService {
         return new BoardResponseDto(board);
     }
 
+    //Board 삭제, 현재 로그인한(쿠키) memberId 사용
     @Transactional
     public void deleteBoard(long boardId, Long memberId) {
         Board board = checkBoardOwner(boardId, memberId);
@@ -78,10 +83,12 @@ public class BoardService {
 
     /**************
      * 예외처리부분
-     * @param boardId
-     * @param memberId
-     * @return
+     * checkBoardOwner
+     * checkBoardId
+     * checkBoardContent
      */
+
+    //boardId,와 로그인한(쿠키) memberId가 일치하는지 검사
     public Board checkBoardOwner(long boardId, long memberId) {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new CustomException(ExceptionErrorCode.BOARD_NOT_FOUND));
@@ -93,6 +100,7 @@ public class BoardService {
         return board;
     }
 
+    //boardId가 존재하는지 검사
     public Board checkBoardId(long boardId) {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new CustomException(ExceptionErrorCode.BOARD_NOT_FOUND));
@@ -100,6 +108,7 @@ public class BoardService {
         return board;
     }
 
+    //Board 생성 시 유효성 검사
     public void checkBoardContent(BoardRequestDto boardRequestDto) {
         if (boardRequestDto.getTitle().length() > 30) {
             throw new CustomException(ExceptionErrorCode.TITLE_LENGTH_SHORT);

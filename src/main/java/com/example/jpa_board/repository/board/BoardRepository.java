@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
+    // Board, Comment Count 용 - Page
     @Query("SELECT a, COUNT(b) FROM Board a LEFT JOIN Comment b ON a.id = b.board.id " +
             "GROUP BY a ORDER BY a.uppLog DESC")
     Page<Object[]> findAllWithCommentCount(Pageable pageable);

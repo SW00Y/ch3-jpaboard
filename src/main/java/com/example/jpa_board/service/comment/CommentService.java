@@ -26,6 +26,7 @@ public class CommentService {
     private final MemberRepository memberRepository;
 
 
+    //Comment 생성
     @Transactional
     public CommentResponseDto createComment(Long boardId, Long memberId, CommentRequestDto requestDto) {
         Board board = boardRepository.findById(boardId)
@@ -41,6 +42,7 @@ public class CommentService {
         return new CommentResponseDto(comment);
     }
 
+    //board Id로 Comment 조회
     public List<CommentResponseDto> getComments(Long boardId) {
         List<CommentResponseDto> dto = commentRepository.findByBoardId(boardId)
                 .stream()
@@ -50,6 +52,7 @@ public class CommentService {
         return dto;
     }
 
+    //Comment 업데이트, 로그인한 (쿠키) MemberId와 Comment MemberId 검증
     @Transactional
     public CommentResponseDto updateComment(Long commentId, Long memberId, CommentRequestDto requestDto) {
         Comment comment = commentRepository.findById(commentId)
@@ -63,7 +66,7 @@ public class CommentService {
         return new CommentResponseDto(comment);
     }
 
-    // 댓글 삭제
+    //Comment 삭제, 로그인한 (쿠키) MemberId와 Comment MemberId 검증
     @Transactional
     public void deleteComment(Long commentId, Long memberId) {
         Comment comment = commentRepository.findById(commentId)

@@ -6,7 +6,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 /***
- * 페이지로 출력 Board
+ * 페이지용 Dto
  */
 @Getter
 public class BoardListResponseDto {
