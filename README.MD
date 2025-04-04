@@ -144,4 +144,4 @@ public abstract class BaseEntity {
 
 1. 어떠한 문제에 있어서 해결하는 방식은 정말 다양한데 그 중 최선의 방법을 찾는 방식이 궁금하다.
     - 성능(응답시간), 코드가독성 등등.. 비교해서 나에게 맞는걸 선택하는건지..?
-2. Entity의 예외처리를 Service에서 진행해서 ExceptionHandler, Enum(ErrorCode) 로 한곳에서 예외처리를 진행하면 편할것 같은데 괜찮은가요..?
+2. Entity의 예외처리를 Service에서 진행해서 ExceptionHandler, Enum(ErrorCode) 로 한곳에서 예외처리를 진행하면 편할것 같아서 진행했는데... 괜찮은지는 모르겠다.
