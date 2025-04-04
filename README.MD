@@ -68,7 +68,7 @@ src
 
 ## API 문서 - 바로가기
 
-[![Swagger](docs/main.png)](https://sw00y.github.io/ch3-schedule/)
+[![Swagger](docs/main.png)](https://sw00y.github.io/ch3-jpaboard/)
 
 ## ERD
 
