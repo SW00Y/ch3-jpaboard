@@ -45,6 +45,7 @@ public class BoardService {
 
     //Board Page
     public List<BoardListResponseDto> getBoards(int page, int size) {
+        int safePage = page < 0 ? 0 : page; // 해설 강의 듣고 추가 .. 안전을 위한 코드
         Pageable pageable = PageRequest.of(page, size);
         Page<Object[]> boardPage = boardRepository.findAllWithCommentCount(pageable);
 
